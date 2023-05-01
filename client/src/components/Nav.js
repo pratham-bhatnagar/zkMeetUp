@@ -16,7 +16,7 @@ function Nav({ connect }) {
           <ul className="navbar-list">
             <li>
               <a
-                href="#"
+                href="/events"
                 className="navbar-link label-lg link:hover cursor-pointer"
               >
                 Events
@@ -25,7 +25,7 @@ function Nav({ connect }) {
 
             <li>
               <a
-                href="#"
+                href="/host"
                 className="navbar-link label-lg link:hover cursor-pointer"
               >
                 Host
