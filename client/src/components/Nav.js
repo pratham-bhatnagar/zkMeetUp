@@ -3,12 +3,12 @@ import React from "react";
 function Nav({ connect }) {
   return (
     <header className="header" data-header>
-      <div className="container">
+      <div className="container max-h-[25px]">
         <img
           src="/images/logo.svg"
           alt=""
-          height={40}
-          className="mr-[10px] h-[40px]  hidden sm:visible"
+          height={20}
+          className="mr-[10px] h-[20px]  hidden sm:visible"
         />
         <h1 className=" gradient marginlogo text-xl"> zkMeetups</h1>
 

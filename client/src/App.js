@@ -12,6 +12,8 @@ import Navbar from "./components/Nav";
 import Host from "./pages/host";
 import { useAccount } from "wagmi";
 import { Toaster } from "react-hot-toast";
+import { Provider } from "react-supabase";
+// import supabaseClient from "./services/supabase";
 
 const chains = [polygonMumbai, goerli, sepolia, polygon];
 const client = createClient(
@@ -23,7 +25,9 @@ const client = createClient(
 function App() {
   const { address } = useAccount();
   return (
-    <>
+    <div className="dark">
+      {" "}
+      {/* <Provider value={supabaseClient}> */}
       <WagmiConfig client={client}>
         <ConnectKitProvider
           theme="nouns"
@@ -46,7 +50,8 @@ function App() {
           </Route>
         </ConnectKitProvider>
       </WagmiConfig>
-    </>
+      {/* </Provider> */}
+    </div>
   );
 }
 
