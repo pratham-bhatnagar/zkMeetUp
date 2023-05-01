@@ -1,7 +1,15 @@
 import { polygon, polygonMumbai, goerli, sepolia } from "wagmi/chains";
-import { ConnectKitProvider, getDefaultClient ,ConnectKitButton} from "connectkit";
+import {
+  ConnectKitProvider,
+  getDefaultClient,
+  ConnectKitButton,
+} from "connectkit";
 import { WagmiConfig, createClient } from "wagmi";
-
+import { Link, Route } from "wouter";
+import Home from "./pages/index";
+import Events from "./pages/event";
+import Navbar from "./components/Nav";
+import Host from "./pages/host";
 
 const chains = [polygonMumbai, goerli, sepolia, polygon];
 const client = createClient(
@@ -22,7 +30,16 @@ function App() {
             "--ck-border-radius": 42,
           }}
         >
-          <ConnectKitButton/>
+          <Navbar connect={<ConnectKitButton />} />
+          <Route path="/">
+            <Home />
+          </Route>
+          <Route path="/events">
+            <Events />
+          </Route>
+          <Route path="/host">
+            <Host />
+          </Route>
         </ConnectKitProvider>
       </WagmiConfig>
     </>
