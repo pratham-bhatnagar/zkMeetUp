@@ -8,10 +8,9 @@ function Nav({ connect }) {
           src="/images/logo.svg"
           alt=""
           height={40}
-          width={40}
-          className="mr-[10px] hidden sm:visible"
+          className="mr-[10px] h-[40px]  hidden sm:visible"
         />
-        <h1 className=" gradient marginlogo"> zkMeetups</h1>
+        <h1 className=" gradient marginlogo text-xl"> zkMeetups</h1>
 
         <nav className="navbar" data-navbar>
           <ul className="navbar-list">

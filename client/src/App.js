@@ -10,6 +10,8 @@ import Home from "./pages/index";
 import Events from "./pages/event";
 import Navbar from "./components/Nav";
 import Host from "./pages/host";
+import { useAccount } from "wagmi";
+import { Toaster } from "react-hot-toast";
 
 const chains = [polygonMumbai, goerli, sepolia, polygon];
 const client = createClient(
@@ -19,6 +21,7 @@ const client = createClient(
   })
 );
 function App() {
+  const { address } = useAccount();
   return (
     <>
       <WagmiConfig client={client}>
@@ -30,6 +33,7 @@ function App() {
             "--ck-border-radius": 42,
           }}
         >
+          <Toaster />
           <Navbar connect={<ConnectKitButton />} />
           <Route path="/">
             <Home />
