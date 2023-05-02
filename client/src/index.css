@@ -19,6 +19,11 @@ input[type="number"]::-webkit-outer-spin-button {
   appearance: none;
   margin: 0;
 }
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
 /*-----------------------------------*\
   #main.css
 \*-----------------------------------*/

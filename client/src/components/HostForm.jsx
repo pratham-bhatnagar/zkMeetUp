@@ -1,18 +1,20 @@
 import React, { useState, useRef } from "react";
 import Tabs from "./tabs";
 import { toast } from "react-hot-toast";
-// import supabase from "../services/supabase";
+import { useAccount } from "wagmi";
+import supabase from "../services/supabase";
 
 function HostForm({ scrollRef }) {
+  const { address: hostAddress } = useAccount();
   const [gating, setGating] = useState("allowlist");
-  const [csvData, setCsvData] = useState([]);
+  const [csvData, setCsvData] = useState([hostAddress]);
   const [addToCsv, setAddToCsv] = useState(null);
   const [ageReq, setAgeReq] = useState(null);
   const [gitReq, setGitReq] = useState(null);
   const [twitterReq, setTwitterReq] = useState(null);
   const fileInput = useRef(null);
   const fileInputHandler = (event) => {
-    setCsvData([]);
+    setCsvData([hostAddress]);
     const file = event.target.files[0];
     const reader = new FileReader();
 
@@ -21,7 +23,7 @@ function HostForm({ scrollRef }) {
       const data = lines
         .map((line) => line.replace(/"/g, "").trim())
         .filter((line) => line !== "");
-      setCsvData(data);
+      setCsvData([hostAddress, ...data]);
     };
 
     reader.readAsText(file);
@@ -42,23 +44,38 @@ function HostForm({ scrollRef }) {
     }
   };
 
-  const submitEvent = async () => {
-    // const { data, error } = await supabase
-    //   .from("Events")
-    //   .insert([
-    //     {
-    //       name ,
-    //       description,
-    //       host,
-    //       allowlist,
-    //       applicants,
-    //       is_event_over,
-    //       cover_image,
-    //       age_req,
-    //       twitter_req,
-    //       git_req,
-    //     },
-    //   ]);
+  const submitEvent = async (e) => {
+    e.preventDefault();
+    const event_data = {
+      name: e.target.elements.name.value,
+      description: e.target.elements.description.value,
+      host: hostAddress,
+      allowlist: csvData,
+      applicants: [],
+      is_event_over: false,
+      recording: null,
+      cover_image: null,
+      age_req: ageReq,
+      git_req: gitReq,
+      twitter_req: twitterReq,
+      on: e.target.elements.date.value,
+    };
+    console.log({ event_data });
+    const { data, error } = await supabase
+      .from("Events")
+      .insert([{ ...event_data }]);
+    if (error) {
+      console.log("Error creating event", error);
+      toast.error("Something went wrong!", {
+        icon: "🚧",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
+    console.log({ data });
   };
   return (
     <section className="mt-2 max-w-[800px] mx-auto">
@@ -95,18 +112,18 @@ function HostForm({ scrollRef }) {
         </label>
       </div>
 
-      <form className="mt-[30px] text-lg">
+      <form className="mt-[30px] text-lg" onSubmit={submitEvent}>
         <div className="grid gap-8 mb-6 md:grid-cols-2">
           <div>
             <label
-              htmlFor="event_name"
+              htmlFor="name"
               className="block m-2 text-2xl font-medium text-gray-900 dark:text-white"
             >
               Event Name <sup className="text-purple-400 text-2xl">*</sup>
             </label>
             <input
               type="text"
-              id="first_name"
+              id="name"
               className="bg-slate-800 text-2xl border-[1px] placeholder:text-gray-500 border-gray-500 text-gray-900 py-3 rounded-lg px-3 focus:ring-blue-500 focus:border-blue-500 block w-full   dark:border-gray-400  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Budiler's Hangout"
               required
@@ -114,16 +131,16 @@ function HostForm({ scrollRef }) {
           </div>
           <div>
             <label
-              htmlFor="event_name"
+              htmlFor="date"
               className="block m-2 text-2xl font-medium text-gray-900 dark:text-white"
             >
-              Event Name <sup className="text-purple-400 text-2xl">*</sup>
+              Select Date<sup className="text-purple-400 text-2xl">*</sup>
             </label>
             <input
-              type="text"
-              id="first_name"
+              type="datetime-local"
+              id="date"
+              placeholder={"DD/MM/YYYY, HH:MM am"}
               className="bg-slate-800 text-2xl border-[1px] placeholder:text-gray-500 border-gray-500 text-gray-900 py-3 rounded-lg px-3 focus:ring-blue-500 focus:border-blue-500 block w-full   dark:border-gray-400  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Budiler's Hangout"
               required
             />
           </div>
@@ -228,12 +245,15 @@ function HostForm({ scrollRef }) {
           </div>
           <div className=" p-3">
             <label
-              htmlFor="event_name"
+              htmlFor="description"
               className="block mb-2 text-2xl font-medium text-gray-900 dark:text-white"
             >
               Event Description
             </label>
-            <textarea className="h-[168px] bg-slate-800 text-2xl border-[1px] placeholder:text-gray-500   text-gray-900 py-3 rounded-lg px-3 focus:ring-blue-500 focus:border-blue-500 block w-full   border-gray-800  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+            <textarea
+              id={"description"}
+              className="h-[168px] bg-slate-800 text-2xl border-[1px] placeholder:text-gray-500   text-gray-900 py-3 rounded-lg px-3 focus:ring-blue-500 focus:border-blue-500 block w-full   border-gray-800  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
           </div>
           <div>
             {/* <Tabs
@@ -360,7 +380,7 @@ function HostForm({ scrollRef }) {
         </div>
 
         <button
-          onClick={submitEvent}
+          type="submit"
           ref={scrollRef}
           className="bg-purple-600 rounded-full px-5 py-3 text-white text-2xl mx-auto"
         >
