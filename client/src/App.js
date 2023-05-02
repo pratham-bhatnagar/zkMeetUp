@@ -10,6 +10,7 @@ import Home from "./pages/index";
 import Events from "./pages/event";
 import Navbar from "./components/Nav";
 import Host from "./pages/host";
+import { EventDetails } from "./pages/eventDetails";
 
 const chains = [polygonMumbai, goerli, sepolia, polygon];
 const client = createClient(
@@ -39,6 +40,9 @@ function App() {
           </Route>
           <Route path="/host">
             <Host />
+          </Route>
+          <Route path='/events/:id'>
+            <EventDetails/>
           </Route>
         </ConnectKitProvider>
       </WagmiConfig>
