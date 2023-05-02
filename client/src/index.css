@@ -490,6 +490,10 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.gradient-bg {
+  background: var(--linear-gradient-2);
+}
 .marginlogo {
   margin: 2px 15px;
 }

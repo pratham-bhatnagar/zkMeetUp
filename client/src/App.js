@@ -7,13 +7,12 @@ import {
 import { WagmiConfig, createClient } from "wagmi";
 import { Link, Route } from "wouter";
 import Home from "./pages/index";
-import Events from "./pages/event";
 import Navbar from "./components/Nav";
+import Dashboard from "./pages/dashboard";
 import Host from "./pages/host";
 import { useAccount } from "wagmi";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-supabase";
-// import supabaseClient from "./services/supabase";
 
 const chains = [polygonMumbai, goerli, sepolia, polygon];
 const client = createClient(
@@ -42,14 +41,15 @@ function App() {
           <Route path="/">
             <Home />
           </Route>
-          <Route path="/events">
-            <Events />
+          <Route path="/dashboard">
+            <Dashboard />
           </Route>
           <Route path="/host">
             <Host />
           </Route>
         </ConnectKitProvider>
       </WagmiConfig>
+      <div className="body-bg-shape"></div>
       {/* </Provider> */}
     </div>
   );
