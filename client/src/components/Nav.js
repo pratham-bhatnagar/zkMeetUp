@@ -3,21 +3,20 @@ import React from "react";
 function Nav({ connect }) {
   return (
     <header className="header" data-header>
-      <div className="container">
+      <div className="container max-h-[25px]">
         <img
           src="/images/logo.svg"
           alt=""
-          height={40}
-          width={40}
-          className="mr-[10px] hidden sm:visible"
+          height={20}
+          className="mr-[10px] h-[20px]  hidden sm:visible"
         />
-        <h1 className=" gradient marginlogo"> zkMeetups</h1>
+        <h1 className=" gradient marginlogo text-xl"> zkMeetups</h1>
 
         <nav className="navbar" data-navbar>
           <ul className="navbar-list">
             <li>
               <a
-                href="#"
+                href="/events"
                 className="navbar-link label-lg link:hover cursor-pointer"
               >
                 Events
@@ -26,7 +25,7 @@ function Nav({ connect }) {
 
             <li>
               <a
-                href="#"
+                href="/host"
                 className="navbar-link label-lg link:hover cursor-pointer"
               >
                 Host
