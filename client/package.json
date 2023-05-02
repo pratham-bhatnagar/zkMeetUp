@@ -12,6 +12,8 @@
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-scripts": "5.0.1",
+    "react-supabase": "^0.2.0",
+    "tailwindcss-animate": "^1.0.5",
     "wagmi": "^0.12.12",
     "web-vitals": "^2.1.4",
     "wouter": "^2.10.1"
