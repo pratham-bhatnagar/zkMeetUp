@@ -3,7 +3,7 @@ import EventCard from "../components/eventCard";
 
 function events() {
 const  DATA = [
-    {
+    { id:1,
       image: "./logo192.png",
       eventName: "dfd",
       venue: "remote",
@@ -11,6 +11,7 @@ const  DATA = [
       time: "1244",
     },
     {
+      id:2,
       image: "./logo192.png",
       eventName: "dfdf",
       venue: "remote",
@@ -18,13 +19,14 @@ const  DATA = [
       time: "1244",
     },
     {
+      id:3,
       image: "./logo192.png",
       eventName: "feregv",
       venue: "remote",
       date:'12/12/10',
       time: "1244",
     },
-    {
+    {id:4,
       image: "./logo192.png",
       eventName: "wecdgd",
       venue: "remote",
@@ -133,7 +135,7 @@ const  DATA = [
         </div> */}
         {/* <EventCard image='./logo192.png' eventName='ass' venue='online' date='12/23/23' time='10.12' /> */}
     <div className= " justify-center w-full flex gap-4 flex-wrap"> {DATA.map((i)=>{
-          return  <EventCard image={i.image} eventName={i.eventName} venue={i.venue} date={i.date} time={i.time} />
+          return <a href={`events/${i.id}`}> <EventCard image={i.image} eventName={i.eventName} venue={i.venue} date={i.date} time={i.time} /></a>
         })}</div>
        
       </section>
