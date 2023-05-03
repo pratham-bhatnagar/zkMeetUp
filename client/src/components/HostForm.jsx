@@ -1,8 +1,15 @@
-import React, { useState, useRef } from "react";
-import Tabs from "./tabs";
+import React, { useState, useRef, useEffect } from "react";
 import { toast } from "react-hot-toast";
-import { useAccount } from "wagmi";
 import supabase from "../services/supabase";
+import { AllowListConfig } from "../contract/public";
+import { huddle_API } from "../services/supabase";
+import {
+  useAccount,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+  useContractWrite,
+} from "wagmi";
+import axios from "axios";
 
 function HostForm({ scrollRef }) {
   const { address: hostAddress } = useAccount();
@@ -11,8 +18,71 @@ function HostForm({ scrollRef }) {
   const [addToCsv, setAddToCsv] = useState(null);
   const [ageReq, setAgeReq] = useState(null);
   const [gitReq, setGitReq] = useState(null);
+  const [idNo, setIdNo] = useState(0);
+  const [file, setFile] = useState();
+  const [Base64Image, setBase64Image] = useState();
   const [twitterReq, setTwitterReq] = useState(null);
+  const [getAllowlistingStatus, setAllowListingStatus] = useState(false);
+  const [getAllowlistID, setAllowlistID] = useState();
   const fileInput = useRef(null);
+
+ 
+
+  async function getMaxId() {
+    const res = await supabase.from("Events").select("id");
+    const ids = res.data.map((item) => item.id);
+    const _maxId = Math.max(...ids);
+    const num = _maxId+1;
+    setIdNo(num);
+    return num
+  }
+  useEffect(()=>{console.log({idNo})},[idNo])
+
+  const { config: multipleAddConfig } = usePrepareContractWrite({
+    ...AllowListConfig,
+    functionName: "addMultipleToAllowlist",
+    args: [idNo, ...csvData],
+  });
+
+  const {
+    data: mulAddData,
+    write: mulAddAddr,
+    isLoading: isAddLoading,
+    isSuccess: isAddSuccess,
+    error: AddrAddingError,
+  } = useContractWrite(multipleAddConfig);
+
+  const {
+    data: AddrAddData,
+    isSuccess: txSuccess_mulAddr,
+    error: txError_mulAddr,
+  } = useWaitForTransaction({ hash: mulAddData?.hash });
+
+  const { config: allowListCreationConfig } = usePrepareContractWrite({
+    ...AllowListConfig,
+    functionName: "createAllowlist",
+    args: [idNo],
+  });
+
+  const {
+    data: listData,
+    write: createList,
+    isLoading: isCreationLoading,
+    isSuccess: isCreationStarted,
+    error: creationError,
+  } = useContractWrite(allowListCreationConfig);
+
+  const {
+    data: txData,
+    isSuccess: txSuccess,
+    error: txError,
+  } = useWaitForTransaction({ hash: listData?.hash });
+
+  const isListCreated = txSuccess;
+  useEffect(()=>{
+    if(isListCreated) mulAddAddr?.()
+  },[isListCreated])
+
   const fileInputHandler = (event) => {
     setCsvData([hostAddress]);
     const file = event.target.files[0];
@@ -45,6 +115,8 @@ function HostForm({ scrollRef }) {
   };
 
   const submitEvent = async (e) => {
+    console.log('maxId',idNo)
+    createList?.()
     e.preventDefault();
     const event_data = {
       name: e.target.elements.name.value,
@@ -54,16 +126,30 @@ function HostForm({ scrollRef }) {
       applicants: [],
       is_event_over: false,
       recording: null,
-      cover_image: null,
+      cover_image: Base64Image,
       age_req: ageReq,
       git_req: gitReq,
       twitter_req: twitterReq,
       on: e.target.elements.date.value,
     };
-    console.log({ event_data });
+    console.log(event_data);
+    const response = await axios.post(
+      "https://iriko.testing.huddle01.com/api/v1/create-room",
+      {
+        title: event_data.name,
+        hostWallets: [hostAddress],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": huddle_API,
+        },
+      }
+    );
+     
     const { data, error } = await supabase
       .from("Events")
-      .insert([{ ...event_data }]);
+      .insert([{ ...event_data, meet: response?.data.data.roomId }]);
     if (error) {
       console.log("Error creating event", error);
       toast.error("Something went wrong!", {
@@ -75,41 +161,87 @@ function HostForm({ scrollRef }) {
         },
       });
     }
-    console.log({ data });
+    
+    
+
+    
+
+
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      const id = await getMaxId();
+console.log({id})
+      setIdNo(id);
+    }
+    fetchData();
+    
+  }, []);
+
   return (
     <section className="mt-2 max-w-[800px] mx-auto">
-      <div className="flex items-center justify-center w-full">
-        <label
-          htmlFor="dropzone-file"
-          className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-700 border-dashed rounded-lg cursor-pointer hover:bg-gray-900 bg-[#1E293B] "
-        >
-          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-            <svg
-              aria-hidden="true"
-              className="w-[60px] h-[60px] mb-3 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-              ></path>
-            </svg>
-            <p className="mb-2 text-3xl text-gray-500 dark:text-gray-400 flex">
-              <span className="font-semibold mx-2">Click to upload</span> event
-              cover image
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              SVG, PNG, JPG
-            </p>
+      <div className="flex items-center justify-center relative w-full">
+        {file && <img className="w-full h-[400px] object-cover" src={file} />}
+        {file && (
+          <div
+            onClick={() => {
+              setFile(null);
+            }}
+            className="w-10 cursor-pointer  flex justify-center items-center h-10 absolute rounded-full border -top-2 -right-2 border-gray-600 "
+          >
+            {" "}
+            X{" "}
           </div>
-          <input id="dropzone-file" type="file" className="hidden" />
-        </label>
+        )}
+        {!file && (
+          <label
+            htmlFor="dropzone-file"
+            className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-700 border-dashed rounded-lg cursor-pointer hover:bg-gray-900 bg-[#1E293B] "
+          >
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <svg
+                aria-hidden="true"
+                className="w-[60px] h-[60px] mb-3 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                ></path>
+              </svg>
+              <p className="mb-2 text-3xl text-gray-500 dark:text-gray-400 flex">
+                <span className="font-semibold mx-2">Click to upload</span>{" "}
+                event cover image
+              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                SVG, PNG, JPG
+              </p>
+            </div>
+
+            <input
+              id="dropzone-file"
+              type="file"
+              onChange={(e) => {
+                setFile(URL.createObjectURL(e.target.files[0]));
+                const b_file = e.target.files[0];
+                const reader = new FileReader();
+                reader.readAsDataURL(b_file);
+                reader.onloadend = ()=>{
+                  setBase64Image(reader.result);
+
+                }
+                
+              }}
+              className="hidden"
+            />
+          </label>
+        )}
       </div>
 
       <form className="mt-[30px] text-lg" onSubmit={submitEvent}>
@@ -146,7 +278,7 @@ function HostForm({ scrollRef }) {
           </div>
           <div className="rounded-lg h-fit text-lg border-slate-700 border bg-[#1a2645] m-1 mt-2 my-0 p-3">
             <h1 className="text-2xl text-gray-300 mb-[15px] m-2">
-              ZK Requirement Proofs
+              ZK Requirement Proofs 🔐
             </h1>
             <div className="flex flex-col gap-3 mb-5 text-gray-300">
               <div
