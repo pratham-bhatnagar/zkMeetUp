@@ -1,10 +1,24 @@
 import * as React from "react";
+import { useLocation } from "wouter";
+
 export const EventDetails = () => {
+    const [location, setLocation] = useLocation();
+    const EventId = location.split('/')[2]
+
+    const fetchData = ()=>{
+
+    }
+  
+
 
   return (
     <div classname="w-full m-8">
       <h1 className="text-xl">Event Name</h1>
       <p>eventId</p>
+      <div>
+      {`${location}`}
+      
+    </div>
 
       <img src="https://s.fotorama.io/1.jpg" alt="" />
 

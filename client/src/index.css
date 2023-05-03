@@ -831,6 +831,7 @@ body {
 
 .newsletter-card .card-text {
   margin-block: 8px 32px;
+  align-items: center;
 }
 
 .newsletter .input-field {
@@ -841,7 +842,7 @@ body {
   box-shadow: var(--shadow-1);
   border-radius: var(--radius-pill);
   outline: none;
-  margin-block-end: 16px;
+
 }
 
 .newsletter .input-field::placeholder {
