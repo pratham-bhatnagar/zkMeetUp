@@ -5,7 +5,7 @@ import { MdAccessTimeFilled } from "react-icons/md";
 import { AiFillCalendar } from "react-icons/ai";
 import { motion } from "framer-motion";
 
-const EventCard = ({ event, buttonText, buttonOnCLick }) => {
+const EventCard = ({ event, buttonText, buttonOnClick }) => {
   return (
     <motion.div
       initial={{ scale: 0.8, opacity: 0 }}
@@ -74,7 +74,7 @@ const EventCard = ({ event, buttonText, buttonOnCLick }) => {
         </div>
       </div>
       <button
-        onClick={buttonOnCLick}
+        onClick={buttonOnClick}
         class="absolute bottom-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gradient-bg  text-white px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
       >
         {buttonText}
