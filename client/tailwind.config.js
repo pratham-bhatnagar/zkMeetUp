@@ -2,6 +2,9 @@
 module.exports = {
   darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  extend: {
+    display: ["group-hover"],
+  },
   theme: {
     // extend: {
     //   fontSize: {

@@ -907,7 +907,7 @@ function Home() {
         <ion-icon name="arrow-up" aria-hidden="true"></ion-icon>
       </a>
 
-      <div className="body-bg-shape"></div>
+    
     </>
   );
 }
