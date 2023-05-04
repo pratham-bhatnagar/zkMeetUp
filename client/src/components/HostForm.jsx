@@ -13,7 +13,6 @@ import axios from "axios";
 
 function HostForm({ scrollRef }) {
   const { address: hostAddress } = useAccount();
-  const [gating, setGating] = useState("allowlist");
   const [csvData, setCsvData] = useState([hostAddress]);
   const [addToCsv, setAddToCsv] = useState(null);
   const [ageReq, setAgeReq] = useState(null);
@@ -22,21 +21,19 @@ function HostForm({ scrollRef }) {
   const [file, setFile] = useState();
   const [Base64Image, setBase64Image] = useState();
   const [twitterReq, setTwitterReq] = useState(null);
-  const [getAllowlistingStatus, setAllowListingStatus] = useState(false);
-  const [getAllowlistID, setAllowlistID] = useState();
   const fileInput = useRef(null);
-
- 
 
   async function getMaxId() {
     const res = await supabase.from("Events").select("id");
     const ids = res.data.map((item) => item.id);
     const _maxId = Math.max(...ids);
-    const num = _maxId+1;
+    const num = _maxId + 1;
     setIdNo(num);
-    return num
+    return num;
   }
-  useEffect(()=>{console.log({idNo})},[idNo])
+  useEffect(() => {
+    console.log({ idNo });
+  }, [idNo]);
 
   const { config: multipleAddConfig } = usePrepareContractWrite({
     ...AllowListConfig,
@@ -57,6 +54,8 @@ function HostForm({ scrollRef }) {
     isSuccess: txSuccess_mulAddr,
     error: txError_mulAddr,
   } = useWaitForTransaction({ hash: mulAddData?.hash });
+
+  // CREATE ALLOWLIST
 
   const { config: allowListCreationConfig } = usePrepareContractWrite({
     ...AllowListConfig,
@@ -79,9 +78,11 @@ function HostForm({ scrollRef }) {
   } = useWaitForTransaction({ hash: listData?.hash });
 
   const isListCreated = txSuccess;
-  useEffect(()=>{
-    if(isListCreated) mulAddAddr?.()
-  },[isListCreated])
+
+  useEffect(() => {
+    if (isListCreated) {
+      mulAddAddr?.();}
+  }, [isListCreated]);
 
   const fileInputHandler = (event) => {
     setCsvData([hostAddress]);
@@ -115,8 +116,8 @@ function HostForm({ scrollRef }) {
   };
 
   const submitEvent = async (e) => {
-    console.log('maxId',idNo)
-    createList?.()
+    console.log("maxId", idNo);
+    createList?.();
     e.preventDefault();
     const event_data = {
       name: e.target.elements.name.value,
@@ -146,7 +147,7 @@ function HostForm({ scrollRef }) {
         },
       }
     );
-     
+      console.log(response.data.data.roomId);
     const { data, error } = await supabase
       .from("Events")
       .insert([{ ...event_data, meet: response?.data.data.roomId }]);
@@ -161,22 +162,15 @@ function HostForm({ scrollRef }) {
         },
       });
     }
-    
-    
-
-    
-
-
   };
 
   useEffect(() => {
     async function fetchData() {
       const id = await getMaxId();
-console.log({id})
+      console.log({ id });
       setIdNo(id);
     }
     fetchData();
-    
   }, []);
 
   return (
@@ -232,11 +226,9 @@ console.log({id})
                 const b_file = e.target.files[0];
                 const reader = new FileReader();
                 reader.readAsDataURL(b_file);
-                reader.onloadend = ()=>{
+                reader.onloadend = () => {
                   setBase64Image(reader.result);
-
-                }
-                
+                };
               }}
               className="hidden"
             />
@@ -515,6 +507,16 @@ console.log({id})
           type="submit"
           ref={scrollRef}
           className="bg-purple-600 rounded-full px-5 py-3 text-white text-2xl mx-auto"
+          onClick={() =>
+            toast.error("Event is now public", {
+              icon: "🚀",
+              style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
+              },
+            })
+          }
         >
           Make Public
         </button>

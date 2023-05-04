@@ -14,6 +14,7 @@ import Host from "./pages/host";
 import { useAccount } from "wagmi";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-supabase";
+import  Meet  from "./pages/meet";
 
 const chains = [filecoinHyperspace];
 const client = createClient(
@@ -39,18 +40,20 @@ function App() {
         >
           <Toaster />
           <Navbar connect={<ConnectKitButton />} />
-          <Route path="/">
-            <Home />
-          </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="/host">
-            <Host />
-          </Route>
-          <Route path="/event/:id">
-            <Event />
-          </Route>
+          <div className="mt-[60px]">
+            <Route path="/">
+              <Home />
+            </Route>
+            <Route path="/dashboard">
+              <Dashboard />
+            </Route>
+            <Route path="/host">
+              <Host />
+            </Route>
+            <Route path="/event/:id">
+              <Event />
+            </Route>
+          </div>
         </ConnectKitProvider>
       </WagmiConfig>
       <div className="body-bg-shape"></div>
