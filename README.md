@@ -7,6 +7,7 @@ We utilize zk proofs for user eligibility. Included with features such as allows
 ### Features
 - Privacy-focused gated event hosting platform
 - Uses zk proofs for user eligibility , protecting user privacy
+- zk based event attendance proof [ prove your presence without using pesky privacy intruding certificates ]
 - Allow listing implemented using FVM 
 - NFT gating to ease organization of community meetups
 - Video calling built on top of Huddle01's SDK
