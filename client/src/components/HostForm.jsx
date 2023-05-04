@@ -507,6 +507,16 @@ function HostForm({ scrollRef }) {
           type="submit"
           ref={scrollRef}
           className="bg-purple-600 rounded-full px-5 py-3 text-white text-2xl mx-auto"
+          onClick={() =>
+            toast.error("Event is now public", {
+              icon: "🚀",
+              style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
+              },
+            })
+          }
         >
           Make Public
         </button>
