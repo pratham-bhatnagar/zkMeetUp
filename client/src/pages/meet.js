@@ -1,8 +1,13 @@
 import React, { useEffect, useRef } from "react";
-
+import {
+  BsFillCameraVideoOffFill,
+  BsFillMicMuteFill,
+  BsFillMicFill,
+  BsFillCameraVideoFill,
+} from "react-icons/bs";
+import { MdExitToApp } from "react-icons/md";
 import { useEventListener, useHuddle01 } from "@huddle01/react";
 import { Audio, Video } from "@huddle01/react/components";
-
 
 import {
   useAudio,
@@ -44,154 +49,159 @@ export default function Meet() {
   const { joinRoom, leaveRoom } = useRoom();
   const { peers } = usePeers();
 
-  useEffect(()=>{
-    initialize("KL1r3E1yHfcrRbXsT4mcE-3mK60Yc3YR")
-  },[])
-
+  useEffect(() => {
+    initialize("KL1r3E1yHfcrRbXsT4mcE-3mK60Yc3YR");
+  }, []);
 
   return (
-    <div className="grid grid-cols-2">
+    <div className="w-[100vw]">
+      {leaveRoom.isCallable && (
+            <h2 className="text-3xl text-green-600 font-extrabold">Room</h2>)}
+      <div className="mt-[20vh] p-10">
+        <br />
+        {leaveRoom.isCallable && (
+          <>
+            {" "}
+            <h2 className="text-3xl text-green-600 font-extrabold">Room</h2>
+            <div className="flex gap-4 flex-wrap">
+              {produceAudio.isCallable ? (
+                <button
+                  className="flex px-2 py-1 items-center"
+                  // disabled={!produceAudio.isCallable}
+                  onClick={() => produceAudio(micStream)}
+                >
+                  <BsFillMicFill className="mx-2" /> Unmute
+                </button>
+              ) : (
+                <button
+                  className="flex px-2 py-1 items-center"
+                  // disabled={!stopProducingAudio.isCallable}
+                  onClick={() => stopProducingAudio()}
+                >
+                  <BsFillMicMuteFill className="mx-2" /> Mute
+                </button>
+              )}
+              {produceVideo.isCallable && !stopProducingVideo.isCallable && (
+                <div className=" w-[300px] h-[200px] bg-slate-600 mx-auto "></div>
+              )}
+
+              {/* <Button disabled={!leaveRoom.isCallable} onClick={leaveRoom}>
+                LEAVE_ROOM
+              </Button> */}
+            </div>
+            <div>
+              {" "}
+              {produceVideo.isCallable ? (
+                <button
+                  className="flex px-2 py-1 items-center"
+                  // disabled={!produceVideo.isCallable}
+                  onClick={() => produceVideo(camStream)}
+                >
+                  <BsFillCameraVideoFill /> Turn On Cam
+                </button>
+              ) : (
+                <button
+                  className="flex px-2 py-1 items-center"
+                  // disabled={!stopProducingVideo.isCallable}
+                  onClick={() => stopProducingVideo()}
+                >
+                  <BsFillCameraVideoOffFill className="mx-2" /> Turn Cam Off
+                </button>
+              )}
+            </div>
+          </>
+        )}
+      </div>
       <div>
-        
-
-        <h2 className="text-2xl">Room State</h2>
-        <h3>{JSON.stringify(state.value)}</h3>
-
-        <h2 className="text-2xl">Me Id</h2>
-        <div className="break-words">
-          {JSON.stringify(state.context.peerId)}
-        </div>
-        <h2 className="text-2xl">Consumers</h2>
-        <div className="break-words">
-          {JSON.stringify(state.context.consumers)}
-        </div>
-
-        <h2 className="text-2xl">Error</h2>
-        <div className="break-words text-red-500">
-          {JSON.stringify(state.context.error)}
-        </div>
-        <h2 className="text-2xl">Peers</h2>
-        <div className="break-words">{JSON.stringify(peers)}</div>
-        <h2 className="text-2xl">Consumers</h2>
-        <div className="break-words">
-          {JSON.stringify(state.context.consumers)}
-        </div>
-
-        <h2 className="text-3xl text-blue-500 font-extrabold">Idle</h2>
-      
-
-        <br />
-        <br />
-        <h2 className="text-3xl text-red-500 font-extrabold">Initialized</h2>
-        <Button
-          disabled={!joinLobby.isCallable}
-          onClick={() => {
-            joinLobby("rrz-zamc-ppe");
-          }}
-        >
-          JOIN_LOBBY
-        </Button>
-        <br />
-        <br />
-        <h2 className="text-3xl text-yellow-500 font-extrabold">Lobby</h2>
-        <div className="flex gap-4 flex-wrap">
-          <Button
+        {!produceVideo.isCallable ? (
+          <video
+            className=" h-[200px] mx-auto border-purple-600 rounded border-2 w-fit hidden  bg-slate-700"
+            ref={videoRef}
+            autoPlay
+            muted
+          />
+        ) : null}
+        {joinLobby.isCallable && (
+          <button
+            className="rounded-full flex  items-center px-3 py-2 mt-2 bg-gray-800 text-gray-200 cursor-pointer disabled:hidden mx-auto"
+            disabled={!joinLobby.isCallable}
+            onClick={() => {
+              joinLobby("rrz-zamc-ppe");
+            }}
+          >
+            <span className="font-bold text-[20px] mx-2"> +</span> Join Lobby
+          </button>
+        )}
+        <div className="flex  justify-center items-center gap-4 flex-wrap w-[600px] mx-auto">
+          <button
+            className=" flex  items-center rounded-full px-3 py-2 bg-gray-800 text-gray-200 cursor-pointer disabled:hidden"
             disabled={!fetchVideoStream.isCallable}
             onClick={fetchVideoStream}
           >
-            FETCH_VIDEO_STREAM
-          </Button>
+            <BsFillCameraVideoFill className="mx-2 " /> video access
+          </button>
 
-          <Button
+          <button
+            className="flex  items-center rounded-full px-3 py-2 bg-gray-800 text-gray-200 cursor-pointer disabled:hidden"
             disabled={!fetchAudioStream.isCallable}
             onClick={fetchAudioStream}
           >
-            FETCH_AUDIO_STREAM
-          </Button>
+            <BsFillMicFill className="mx-2 " /> audio access
+          </button>
 
-          <Button disabled={!joinRoom.isCallable} onClick={joinRoom}>
-            JOIN_ROOM
-          </Button>
+          <button
+            className="rounded-full flex items-center px-3 py-2 bg-gray-800 text-gray-200 cursor-pointer disabled:hidden"
+            disabled={!joinRoom.isCallable}
+            onClick={joinRoom}
+          >
+            <span className="font-bold text-[20px] mx-2"> +</span> Join Room
+          </button>
 
-          <Button
+          <button
+            className="rounded-full px-3 py-2 bg-gray-800 text-gray-200 cursor-pointer disabled:hidden flex items-center"
             disabled={!state.matches("Initialized.JoinedLobby")}
             onClick={() => send("LEAVE_LOBBY")}
           >
-            LEAVE_LOBBY
-          </Button>
+            Leave Lobby <MdExitToApp className="mx-2" />
+          </button>
 
-          <Button
+          {/* <button className="rounded-full px-3 py-2 bg-gray-800 text-gray-200 cursor-pointer disabled:hidden"
             disabled={!stopVideoStream.isCallable}
             onClick={stopVideoStream}
           >
-            STOP_VIDEO_STREAM
-          </Button>
-          <Button
+            <BsFillCameraVideoOffFill/>
+          </button> */}
+          {/* <button className="rounded-full px-3 py-2 bg-gray-800 text-gray-200 cursor-pointer disabled:hidden"
             disabled={!stopAudioStream.isCallable}
             onClick={stopAudioStream}
           >
-            STOP_AUDIO_STREAM
-          </Button>
+              <BsFillMicMuteFill/>
+          </button>*/}
         </div>
-        <br />
-        <h2 className="text-3xl text-green-600 font-extrabold">Room</h2>
-        <div className="flex gap-4 flex-wrap">
-          <Button
-            disabled={!produceAudio.isCallable}
-            onClick={() => produceAudio(micStream)}
-          >
-            PRODUCE_MIC
-          </Button>
-
-          <Button
-            disabled={!produceVideo.isCallable}
-            onClick={() => produceVideo(camStream)}
-          >
-            PRODUCE_CAM
-          </Button>
-
-          <Button
-            disabled={!stopProducingAudio.isCallable}
-            onClick={() => stopProducingAudio()}
-          >
-            STOP_PRODUCING_MIC
-          </Button>
-
-          <Button
-            disabled={!stopProducingVideo.isCallable}
-            onClick={() => stopProducingVideo()}
-          >
-            STOP_PRODUCING_CAM
-          </Button>
-
-          <Button disabled={!leaveRoom.isCallable} onClick={leaveRoom}>
-            LEAVE_ROOM
-          </Button>
-
-          
-        </div>
-
-        {/* Uncomment to see the Xstate Inspector */}
-        {/* <Inspect /> */}
-      </div>
-      <div>
-        Me Video:
-        <video ref={videoRef} autoPlay muted></video>
         <div className="grid grid-cols-4">
           {Object.values(peers)
             .filter((peer) => peer.cam)
             .map((peer) => (
-              <Video
-                key={peer.peerId}
-                peerId={peer.peerId}
-                track={peer.cam}
-                debug
-              />
+              <>   <Video
+              key={peer.peerId}
+              peerId={peer.peerId}
+              track={peer.cam}
+              debug
+            />  
+             <Video
+            key={peer.peerId}
+            peerId={peer.peerId}
+            track={peer.cam}
+            debug
+          />
+          </>
+           
             ))}
           {Object.values(peers)
             .filter((peer) => peer.mic)
             .map((peer) => (
-              <Audio key={peer.peerId} peerId={peer.peerId} track={peer.mic} />
+ <Audio key={peer.peerId} peerId={peer.peerId} track={peer.mic} />
+
             ))}
         </div>
       </div>
