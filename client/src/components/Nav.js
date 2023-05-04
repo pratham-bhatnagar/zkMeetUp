@@ -4,8 +4,8 @@ import { useAccount } from "wagmi";
 function Nav({ connect }) {
   const { isConnected } = useAccount();
   return (
-    <header className="header border-b-[1px] border-slate-700" data-header>
-      <div className="container max-h-[25px]">
+    <header className="header border-b-[1px] border-slate-700 " data-header>
+      <div className="container max-h-[25px] ">
         <img
           src="/images/logo.svg"
           alt=""

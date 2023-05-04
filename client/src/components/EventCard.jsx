@@ -12,14 +12,23 @@ const EventCard = ({ event, buttonText, buttonOnClick }) => {
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.5, opacity: 0 }}
       transition={{ type: "spring" }}
-      whileHover={{ scale: 0.95 }}
+      whileHover={buttonOnClick && { scale: 0.95 }}
       className="bg-[#0E1729] min-w-[360px] relative group rounded-xl p-3 pt-3 w-fit border border-slate-800 "
     >
-      <img
-        src="https://loremflickr.com/800/360"
-        alt="event"
-        className="w-[360px] h-[180px] object-fill rounded-lg mb-2"
-      />
+      {event.cover_image ? (
+        <img
+          src={`${event.cover_image}`}
+          alt={event.name}
+          className="w-[360px] h-[180px] object-cover rounded-lg mb-2"
+        />
+      ) : (
+        <img
+          src="https://loremflickr.com/800/360"
+          alt="event"
+          className="w-[360px] h-[180px] object-cover rounded-lg mb-2"
+        />
+      )}
+
       <div className="flex items-center mt-3">
         <Avvvatars size={25} value={event?.host} style={"shape"} />
 
@@ -44,13 +53,13 @@ const EventCard = ({ event, buttonText, buttonOnClick }) => {
           <div className="flex items-center -space-x-5 pointer-events-none">
             <Avvvatars
               className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800 pointer-events-none"
-              value={`${event?.allowlist[0]}random`}
+              value={`${event?.allowlist?.[0]}random`}
               style={"shape"}
               size={25}
             />{" "}
             <Avvvatars
               className="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800 pointer-events-none"
-              value={`${event?.allowlist[0]}addr`}
+              value={`${event?.allowlist?.[0]}addr`}
               style={"shape"}
               size={25}
             />{" "}
@@ -64,7 +73,7 @@ const EventCard = ({ event, buttonText, buttonOnClick }) => {
               className="flex items-center justify-center w-[30px] h-[30px] text-lg font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800"
               href="#"
             >
-              + {event?.allowlist.length + 1}
+              + {event?.allowlist?.length + 1}
             </a>
           </div>
         </div>
@@ -73,12 +82,14 @@ const EventCard = ({ event, buttonText, buttonOnClick }) => {
           <span className="mx-2"> Online</span>
         </div>
       </div>
-      <button
-        onClick={buttonOnClick}
-        class="absolute bottom-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gradient-bg  text-white px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-      >
-        {buttonText}
-      </button>
+      {buttonOnClick && (
+        <button
+          onClick={buttonOnClick}
+          class="absolute bottom-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gradient-bg  text-white px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          {buttonText}
+        </button>
+      )}
     </motion.div>
   );
 };

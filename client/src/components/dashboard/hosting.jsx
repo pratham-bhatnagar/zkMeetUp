@@ -18,7 +18,8 @@ function Hosting({ events }) {
                   <EventCard
                     event={event}
                     buttonText="See Applicants"
-                    buttonOnCLick={() => {
+                    buttonOnClick={() => {
+                      console.log("click");
                       setLocation(`/event/${event.id}`);
                     }}
                   />
