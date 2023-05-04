@@ -24,6 +24,15 @@ input[type="number"]::-webkit-outer-spin-button {
   filter: invert(1);
 }
 
+.glass {
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
 /*-----------------------------------*\
   #main.css
 \*-----------------------------------*/
@@ -189,6 +198,8 @@ html {
   font-family: var(--ff-urbanist);
   font-size: 10px;
   scroll-behavior: smooth;
+  
+  overflow-x: hidden;
 }
 
 body {
@@ -197,6 +208,7 @@ body {
   font-size: 1.6rem;
   line-height: 1.5;
   z-index: 1;
+  overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {

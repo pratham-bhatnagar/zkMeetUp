@@ -13,8 +13,7 @@ import Dashboard from "./pages/dashboard";
 import Host from "./pages/host";
 import { useAccount } from "wagmi";
 import { Toaster } from "react-hot-toast";
-import { Provider } from "react-supabase";
-import  Meet  from "./pages/meet";
+import Meet from "./pages/meet";
 
 const chains = [filecoinHyperspace];
 const client = createClient(
@@ -28,7 +27,6 @@ function App() {
   return (
     <div className="dark">
       {" "}
-      {/* <Provider value={supabaseClient}> */}
       <WagmiConfig client={client}>
         <ConnectKitProvider
           theme="nouns"
@@ -57,7 +55,6 @@ function App() {
         </ConnectKitProvider>
       </WagmiConfig>
       <div className="body-bg-shape"></div>
-      {/* </Provider> */}
     </div>
   );
 }
