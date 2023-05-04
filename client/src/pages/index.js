@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Spinner from "../components/Spinner";
 import { Link, Route, useRouter } from "wouter";
 import supabase from "../services/supabase";
 import EventCard from "../components/EventCard";
@@ -48,28 +49,34 @@ function Home() {
               >
                 Discover Events
               </h2>
-              <div className="grid grid-cols-3 gap-10">
-                {events.map((event) => {
-                  if (isConnected) {
-                    if (
-                      event.allowlist.includes(address) ||
-                      event.host === address ||
-                      event.applicants.includes(address)
-                    ) {
-                      return null;
+              {!events ? (
+                <div className="w-full h-[800px] flex items-center justify-center">
+                  <Spinner size="4rem" />
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 gap-10">
+                  {events.map((event) => {
+                    if (isConnected) {
+                      if (
+                        event.allowlist.includes(address) ||
+                        event.host === address ||
+                        event.applicants.includes(address)
+                      ) {
+                        return null;
+                      }
                     }
-                  }
-                  return (
-                    <EventCard
-                      event={event}
-                      buttonOnClick={() => {
-                        setLocation(`/event/${event.id}`);
-                      }}
-                      buttonText={"Apply to attend"}
-                    />
-                  );
-                })}
-              </div>
+                    return (
+                      <EventCard
+                        event={event}
+                        buttonOnClick={() => {
+                          setLocation(`/event/${event.id}`);
+                        }}
+                        buttonText={"Apply to attend"}
+                      />
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </section>
 

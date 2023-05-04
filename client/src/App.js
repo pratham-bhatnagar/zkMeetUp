@@ -40,21 +40,20 @@ function App() {
         >
           <Toaster />
           <Navbar connect={<ConnectKitButton />} />
-          <Route path="/">
-            <Home />
-          </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="/host">
-            <Host />
-          </Route>
-          <Route path="/event/:id">
-            <Event />
-          </Route>
-          <Route path="/meet">
-            <Meet/>
-          </Route>
+          <div className="mt-[60px]">
+            <Route path="/">
+              <Home />
+            </Route>
+            <Route path="/dashboard">
+              <Dashboard />
+            </Route>
+            <Route path="/host">
+              <Host />
+            </Route>
+            <Route path="/event/:id">
+              <Event />
+            </Route>
+          </div>
         </ConnectKitProvider>
       </WagmiConfig>
       <div className="body-bg-shape"></div>
