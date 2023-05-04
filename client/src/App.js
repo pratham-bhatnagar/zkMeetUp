@@ -1,4 +1,4 @@
-import { polygon, polygonMumbai, goerli, sepolia } from "wagmi/chains";
+import { filecoinHyperspace } from "wagmi/chains";
 import {
   ConnectKitProvider,
   getDefaultClient,
@@ -14,8 +14,9 @@ import Host from "./pages/host";
 import { useAccount } from "wagmi";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-supabase";
+import  Meet  from "./pages/meet";
 
-const chains = [polygonMumbai, goerli, sepolia, polygon];
+const chains = [filecoinHyperspace];
 const client = createClient(
   getDefaultClient({
     appName: "zkMeetups",
