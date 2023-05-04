@@ -6,13 +6,13 @@ function Nav({ connect }) {
   return (
     <header className="header border-b-[1px] border-slate-700" data-header>
       <div className="container max-h-[25px]">
-        <img
+        <a href="/#"> <img
           src="/images/logo.svg"
           alt=""
-          height={20}
-          className="mr-[10px] h-[20px]  hidden sm:visible"
-        />
-        <h1 className=" gradient marginlogo text-xl"> zkMeetups</h1>
+          height={25}
+          className="mr-[10px] h-[30px] sm:visible"
+        /> </a>
+        <h1 className=" gradient marginlogo text-xxl"> zkMeetups</h1>
 
         <nav className="navbar" data-navbar>
           <ul className="navbar-list">
