@@ -1,5 +1,9 @@
+import { useLocation } from "wouter";
 import EventCard from "../EventCard";
-function Hosting({ events }) {
+import { useAccount } from "wagmi";
+function Applied({ events }) {
+  const [location, setLocation] = useLocation();
+  const { address } = useAccount();
   return (
     <div className="">
       <h1 className="text-[25px] text-gray-300 m-3 font-semibold">Applied</h1>
@@ -9,14 +13,16 @@ function Hosting({ events }) {
         ) : (
           <>
             {events?.map((event) => {
-              console.log(event);
-              return (
-                <EventCard
-                  event={event}
-                  buttonText="Under review by host"
-                  buttonOnCLick={() => {}}
-                />
-              );
+              if (event.applicants.includes(address))
+                return (
+                  <EventCard
+                    event={event}
+                    buttonText="Under review by host"
+                    buttonOnCLick={() => {
+                      setLocation(`/event/${event.id}`);
+                    }}
+                  />
+                );
             })}
           </>
         )}
@@ -25,4 +31,4 @@ function Hosting({ events }) {
   );
 }
 
-export default Hosting;
+export default Applied;
