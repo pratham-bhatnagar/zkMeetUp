@@ -14,7 +14,7 @@ import Host from "./pages/host";
 import { useAccount } from "wagmi";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-supabase";
-import { Meet } from "./pages/meet";
+import  Meet  from "./pages/meet";
 
 const chains = [filecoinHyperspace];
 const client = createClient(
