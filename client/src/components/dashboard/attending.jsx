@@ -22,7 +22,7 @@ function Hosting({ events }) {
                   <EventCard
                     event={event}
                     buttonText="Enter Room"
-                    buttonOnCLick={() => {
+                    buttonOnClick={() => {
                       setLocation(`/event/${event.id}`);
                     }}
                   />

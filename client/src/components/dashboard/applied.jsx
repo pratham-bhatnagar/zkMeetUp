@@ -18,7 +18,7 @@ function Applied({ events }) {
                   <EventCard
                     event={event}
                     buttonText="Under review by host"
-                    buttonOnCLick={() => {
+                    buttonOnClick={() => {
                       setLocation(`/event/${event.id}`);
                     }}
                   />

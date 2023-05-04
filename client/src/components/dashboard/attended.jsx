@@ -22,7 +22,7 @@ function Attended({ events }) {
                   <EventCard
                     event={event}
                     buttonText="See recording"
-                    buttonOnCLick={() => {
+                    buttonOnClick={() => {
                       setLocation(`/event/${event.id}`);
                     }}
                   />

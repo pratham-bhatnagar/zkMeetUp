@@ -1,4 +1,5 @@
 import axios from "axios";
+import Meet from "./meet";
 import Avvvatars from "avvvatars-react";
 import { AiFillCalendar } from "react-icons/ai";
 import { HiLocationMarker } from "react-icons/hi";
@@ -85,9 +86,8 @@ function Event() {
     setEligiblity(true);
   };
 
-  if (event?.host === address) return <h1>Host controls </h1>;
-  else if (event?.allowlist?.includes(address))
-    return <h1>User with watch access </h1>;
+  if (event?.host === address) return <Meet />;
+  else if (event?.allowlist?.includes(address)) return <Meet />;
   else if (event?.applicants?.includes(address))
     return <h1>Your on event waitlist</h1>;
   else
