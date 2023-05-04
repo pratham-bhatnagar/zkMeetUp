@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   BsFillCameraVideoOffFill,
   BsFillMicMuteFill,
@@ -8,7 +8,8 @@ import {
 import { MdExitToApp } from "react-icons/md";
 import { useEventListener, useHuddle01 } from "@huddle01/react";
 import { Audio, Video } from "@huddle01/react/components";
-
+import axios from "axios";
+import QRCode from "qrcode";
 import {
   useAudio,
   useLobby,
@@ -22,7 +23,17 @@ import Button from "../components/Button";
 
 export default function Meet() {
   const videoRef = useRef(null);
-
+  const [base64, setBase64] = useState(null);
+  const handleQR = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/age/generate-proof?age=20"
+      );
+      const img = await QRCode.toDataURL(JSON.stringify(response.data));
+      console.log(img);
+      setBase64(img);
+    } catch (err) {}
+  };
   const { state, send } = useMeetingMachine();
   // Event Listner
   useEventListener("lobby:cam-on", () => {
@@ -56,7 +67,8 @@ export default function Meet() {
   return (
     <div className="w-[100vw]">
       {leaveRoom.isCallable && (
-            <h2 className="text-3xl text-green-600 font-extrabold">Room</h2>)}
+        <h2 className="text-3xl text-green-600 font-extrabold">Room</h2>
+      )}
       <div className="mt-[20vh] p-10">
         <br />
         {leaveRoom.isCallable && (
@@ -182,29 +194,37 @@ export default function Meet() {
           {Object.values(peers)
             .filter((peer) => peer.cam)
             .map((peer) => (
-              <>   <Video
-              key={peer.peerId}
-              peerId={peer.peerId}
-              track={peer.cam}
-              debug
-            />  
-             <Video
-            key={peer.peerId}
-            peerId={peer.peerId}
-            track={peer.cam}
-            debug
-          />
-          </>
-           
+              <>
+                {" "}
+                <Video
+                  key={peer.peerId}
+                  peerId={peer.peerId}
+                  track={peer.cam}
+                  debug
+                />
+                <Video
+                  key={peer.peerId}
+                  peerId={peer.peerId}
+                  track={peer.cam}
+                  debug
+                />
+              </>
             ))}
           {Object.values(peers)
             .filter((peer) => peer.mic)
             .map((peer) => (
- <Audio key={peer.peerId} peerId={peer.peerId} track={peer.mic} />
-
+              <Audio key={peer.peerId} peerId={peer.peerId} track={peer.mic} />
             ))}
         </div>
       </div>
+      <button
+        onClick={handleQR}
+        className={"px-4 py-2 text-white rounded-lg font-bold bg-purple-400"}
+      >
+        Generate Proof of Attendance
+      </button>
+
+      {base64 && <img src={base64} />}
     </div>
   );
 }
