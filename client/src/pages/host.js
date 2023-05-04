@@ -53,6 +53,7 @@ function Host() {
           </button>
         </div>
       </section>
+
       {showForm && <HostForm scrollRef={scrollRef} />}
     </div>
   );
